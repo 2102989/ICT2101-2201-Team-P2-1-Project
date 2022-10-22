@@ -1,0 +1,81 @@
+actor "User" as user
+boundary "User Management" as um
+control "Password Controller" as pc
+actor "Google Server" as gs
+entity "User" as us
+actor "Database" as db
+
+user -> um: Change password
+activate user
+activate um
+alt Valid email
+user -> um: Enter email
+um -> pc: editPassword()
+activate pc
+
+pc -> gs: Generate OTP
+activate gs
+
+gs -> user: Send OTP to email
+
+else Invalid email
+gs --> pc: Invalid Email
+pc --> um: Unsuccessful()
+deactivate pc
+um --> user: Unsuccessful()
+user -> um: Re-enter email
+deactivate gs
+end
+alt OTP valid
+user -> um: Enter OTP
+else OTP invalid
+um --> user: OTP invalid
+um --> user: Prompt to generate new OTP
+end
+activate um
+
+alt New password match
+user -> um: Enter new password 
+user -> um: Re-enter new password
+
+um -> pc: Validate details
+activate pc
+pc --> um: Success()
+um -> pc: Save changes
+
+
+pc -> us: New Password
+
+activate us
+us -> db: Update password
+activate db
+db --> us: Success()
+deactivate db
+us --> pc: Success()
+
+pc --> um: Success()
+um --> user: Success()
+
+else New password do not match
+um --> user: Prompt to re-enter new password
+user -> um: Re-enter new password
+
+else New password do not meet requirements
+um --> user: Prompt to re-enter new password
+user -> um: Re-enter new password
+else User cancels changes
+um -> pc: Cancel changes
+pc -> us: Changes discarded
+us --> pc: Successful()
+deactivate us
+pc --> um: Successful()
+deactivate pc
+um --> user: Successful()
+deactivate um
+deactivate user
+end
+
+
+
+
+@enduml
