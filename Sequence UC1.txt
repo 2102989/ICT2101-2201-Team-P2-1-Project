@@ -1,0 +1,39 @@
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+
+actor "Admin" as admin
+boundary "User Management" as um
+control "Admin Controller" as ac
+entity "User" as user
+database "Database" as db
+
+admin -> um: Access
+activate um
+
+um -> ac: addUser()
+activate ac
+
+ac -> user: new User()
+activate user
+
+user -> db: getMaskedNRIC()
+activate db
+user -> db: setMaskedNRIC()
+
+db --> user: Success()
+user --> ac: Success()
+ac --> um: Success()
+um --> admin: Success()
+
+alt unsuccessful case
+  db --> user: Unsuccessful()
+  user --> ac: Unsuccessful()
+  ac --> um: Existing user
+  um --> admin: User cannot be added
+  
+  um -> ac: addUser()
+  ac --> um: Input error
+  um --> admin: Re-enter information
+end
+@enduml
