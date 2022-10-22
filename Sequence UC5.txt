@@ -1,0 +1,30 @@
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+
+actor "Manager" as manager
+boundary "Job Management" as jm
+control "Staff Management" as sm
+entity "Staff" as staff
+actor "Database" as db
+
+manager -> jm: Display all jobs
+activate jm
+
+alt alternate scenario
+manager -> jm: Search for specific job
+manager -> jm: getJobID()
+jm -> sm: ViewAvailability()
+activate sm
+
+sm -> staff:assignJobAssignments()
+
+staff -> db: Job assigned
+
+db --> staff: Success()
+staff --> sm: Success()
+sm --> jm: Success()
+jm--> manager: Success()
+end
+
+@enduml
