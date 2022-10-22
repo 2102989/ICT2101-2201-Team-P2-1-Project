@@ -20,11 +20,11 @@ gs -> user: Send OTP to email
 
 else Invalid email
 gs --> pc: Invalid Email
+deactivate gs
 pc --> um: Unsuccessful()
 deactivate pc
 um --> user: Unsuccessful()
 user -> um: Re-enter email
-deactivate gs
 end
 alt OTP valid
 user -> um: Enter OTP
