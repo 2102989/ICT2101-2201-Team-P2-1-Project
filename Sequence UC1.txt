@@ -2,7 +2,7 @@ actor "Admin" as admin
 boundary "User Management" as um
 control "Admin Controller" as ac
 entity "User" as user
-database "Database" as db
+actor "Database" as db
 
 admin -> um: Access
 activate admin
