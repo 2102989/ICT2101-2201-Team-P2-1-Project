@@ -3,6 +3,7 @@ boundary "Job Management" as jm
 control "Job Controller" as jc
 entity "Job Calendar" as jca
 actor "Database" as db
+actor "Staff" as staff
 
 alt Manager accepts rejection
 jm --> manager: Display Rejection request
@@ -17,6 +18,8 @@ jc -> jca: Job unallocated
 activate jca
 
 jca -> db: Update jobs
+db -> staff: Send email
+activate staff
 activate db
 db --> jca: Success()
 jca --> jc: Success()
@@ -28,6 +31,8 @@ manager -> jm: Reject rejection
 jm -> jc: rejectRejection()
 jc -> jca: Job unchanged
 jca -> db: Update jobs
+db -> staff: Send email
+deactivate staff
 db --> jca: Success()
 deactivate db
 jca --> jc: Success()
