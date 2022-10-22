@@ -17,16 +17,19 @@ activate ac
 ac -> user: new User()
 activate user
 
+
+
 user -> db: getMaskedNRIC()
 activate db
-user -> db: setMaskedNRIC()
-
 db --> user: Success()
 user --> ac: Success()
 ac --> um: Success()
 um --> admin: Success()
 
 alt unsuccessful case
+user -> db: setMaskedNRIC()
+
+
   db --> user: Unsuccessful()
   user --> ac: Unsuccessful()
   ac --> um: Existing user
