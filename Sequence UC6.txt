@@ -1,0 +1,23 @@
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 20
+skinparam maxmessagesize 60
+
+actor "Staff" as staff
+boundary "Staff Management" as sm
+control "Staff Controller" as sc
+entity "Job Calendar" as jc
+
+
+staff -> sm: Selects to view workload
+activate sm
+sm -> sc: ViewAssignment()
+activate sc
+sc -> jc: ListOfJob
+activate jc
+
+jc --> sc: Success()
+sc -> sm: Success()
+sm --> staff: Success()
+
+
+@enduml
