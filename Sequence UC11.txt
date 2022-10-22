@@ -1,0 +1,43 @@
+actor "Manager" as manager
+boundary "Job Management" as jm
+control "Job Controller" as jc
+entity "Job Calendar" as jca
+actor "Database" as db
+
+alt Manager accepts rejection
+jm --> manager: Display Rejection request
+activate manager
+activate jm
+manager -> jm: Accept Rejection
+
+jm -> jc: acceptRejection()
+activate jc
+
+jc -> jca: Job unallocated
+activate jca
+
+jca -> db: Update jobs
+activate db
+db --> jca: Success()
+jca --> jc: Success()
+jc --> jm: Success()
+jm --> manager: Success()
+
+else Manager rejects rejection
+manager -> jm: Reject rejection
+jm -> jc: rejectRejection()
+jc -> jca: Job unchanged
+jca -> db: Update jobs
+db --> jca: Success()
+deactivate db
+jca --> jc: Success()
+deactivate jca
+jc --> jm: Success()
+deactivate jc
+jm --> manager: Success()
+deactivate jm
+deactivate manager
+end
+
+
+@enduml
