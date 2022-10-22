@@ -4,8 +4,8 @@ control "Staff Controller" as sc
 entity "Job Calendar" as jc
 actor "Database" as db
 
-activate staff
 staff -> jm: View available jobs
+activate staff
 activate jm
 
 jm -> sc: editJobPreference()
