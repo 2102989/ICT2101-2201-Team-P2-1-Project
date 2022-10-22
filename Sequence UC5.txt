@@ -1,7 +1,3 @@
-skinparam sequenceArrowThickness 2
-skinparam roundcorner 20
-skinparam maxmessagesize 60
-
 actor "Manager" as manager
 boundary "Job Management" as jm
 control "Staff Management" as sm
@@ -9,6 +5,7 @@ entity "Staff" as staff
 actor "Database" as db
 
 manager -> jm: Display all jobs
+activate manager
 activate jm
 
 alt alternate scenario
@@ -18,13 +15,20 @@ jm -> sm: ViewAvailability()
 activate sm
 
 sm -> staff:assignJobAssignments()
+activate staff
 
 staff -> db: Job assigned
+activate db
 
 db --> staff: Success()
+deactivate db
 staff --> sm: Success()
+deactivate staff
 sm --> jm: Success()
+deactivate sm
 jm--> manager: Success()
+deactivate jm
+deactivate manager
 end
 
 @enduml
