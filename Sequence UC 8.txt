@@ -1,0 +1,29 @@
+actor "Staff" as staff
+boundary "Job Management" as jm
+control "Staff Controller" as sc
+entity "Job Calendar" as jc
+actor "Database" as db
+
+staff -> jm: Check weekly job assignments
+activate staff
+activate jm
+
+jm -> sc: viewAssignment()
+activate sc
+
+sc -> jc: Display weekly job assignments
+activate jc
+jc -> db: ListOfJob
+activate db
+
+db --> jc: Success()
+deactivate db
+jc --> sc: Success()
+deactivate jc
+sc --> jm: Success()
+deactivate sc
+jm --> staff: Success()
+deactivate jm
+deactivate staff
+
+@enduml
