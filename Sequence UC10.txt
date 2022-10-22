@@ -1,0 +1,30 @@
+actor "Staff" as staff
+boundary "Job Management" as jm
+control "Staff Controller" as sc
+entity "Job Calendar" as jc
+actor "Database" as db
+
+activate staff
+staff -> jm: View available jobs
+activate jm
+
+jm -> sc: editJobPreference()
+activate sc
+jm -> sc: Confirm changes
+
+sc -> jc: Send data
+activate jc
+jc -> db: Job preference changed
+activate db
+
+db --> jc: Success()
+deactivate db
+jc --> sc: Success()
+deactivate jc
+sc --> jm: Success()
+deactivate sc
+jm --> staff: Success()
+deactivate jm
+deactivate staff
+
+@enduml

@@ -1,7 +1,3 @@
-skinparam sequenceArrowThickness 2
-skinparam roundcorner 20
-skinparam maxmessagesize 60
-
 actor "Admin" as admin
 boundary "User Management" as um
 control "Admin Controller" as ac
@@ -9,6 +5,7 @@ entity "User" as user
 database "Database" as db
 
 admin -> um: Access
+activate admin
 activate um
 
 um -> ac: addUser()
@@ -31,12 +28,17 @@ user -> db: setMaskedNRIC()
 
 
   db --> user: Unsuccessful()
+  deactivate db
   user --> ac: Unsuccessful()
+  deactivate user
   ac --> um: Existing user
   um --> admin: User cannot be added
   
   um -> ac: addUser()
   ac --> um: Input error
+  deactivate ac
   um --> admin: Re-enter information
+  deactivate um
+  deactivate admin
 end
 @enduml
